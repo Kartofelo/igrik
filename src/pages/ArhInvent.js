@@ -1,14 +1,13 @@
+// импорт компонентов и файлов ---------------------------------------------------------------------------
 import React from 'react'; //импорт компонентов из библиотеки реакт
 import { ConfigProvider, Space, Button, Table, Input, Radio } from 'antd'; //импорт компонентов из библиотеки АнтДизайн
-import { useState } from 'react';
 
-import Loaders from './components/Loaders';
-import Inventory from './Inventory';
-import { push } from 'firebase/database';
+import Loaders from './components/Loaders'; //импорт самописного компонента
+import Inventory from './Inventory'; //импорт самописного компонента
 
 
 export default class ArhInvent extends React.Component {
-
+    
     constructor(props) {
         super(props);
         this.state = {

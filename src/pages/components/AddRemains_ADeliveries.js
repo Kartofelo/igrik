@@ -1,12 +1,13 @@
+// импорт компонентов и файлов ---------------------------------------------------------------------------
 import React from 'react'; //импорт компонентов из библиотеки реакт
 import { ConfigProvider, Space, Button, Table, InputNumber } from 'antd'; //импорт компонентов из библиотеки АнтДизайн
 import Icon, {
     CameraFilled,
 } from '@ant-design/icons'; //импорт иконок из библиотеки АнтДизайн
-import Loaders from './Loaders';
-import locale from 'antd/es/date-picker/locale/ru_RU';
-import ScanProducts from './ScanProducts';
-import { tab } from '@testing-library/user-event/dist/tab';
+import Loaders from './Loaders'; //импорт самописного компонента - анимации загрузки
+import locale from 'antd/es/date-picker/locale/ru_RU'; //импорт языка из ант дизайна
+import ScanProducts from './ScanProducts'; //импорт самописного компонента - компонент для подсчета количества через сканирование камерой
+
 
 export default class AddRemains extends React.Component {
 
@@ -21,6 +22,7 @@ export default class AddRemains extends React.Component {
         }
     }
 
+    // функция обработки изменений в инпутах ---------------------------------------------------------------------------
     changeCount(ind, val) {
         let data = this.state.table;
 
@@ -30,7 +32,9 @@ export default class AddRemains extends React.Component {
             table: data
         })
     }
+    //-------------------------------------------------------------------------------------------------------------
 
+    // функция отрисовки таблицы ---------------------------------------------------------------------------
     renderTable() {
         // 1 - тут формируется структура столбцов от полученных данных из FireBase
         let column = [];
@@ -66,7 +70,7 @@ export default class AddRemains extends React.Component {
             }
         }
 
-        // 2 - тут отрисовывается таблица которую возвращает функция "filterTable()" (ее описал выше)
+        // 2 - тут отрисовывается таблица которую возвращает функция "filterTable()" 
         return (
             <Table
                 className='tableStyle'
@@ -75,14 +79,17 @@ export default class AddRemains extends React.Component {
             />
         )
     }
+    //-------------------------------------------------------------------------------------------------------------
 
 
     filterTable() {
         let result = this.state.table
-
         return result;
     }
 
+    // функция преднсатройки перед рендером ---------------------------------------------------------------------------
+    //  (функция componentDidMount() всегда вызывается перед тем как отрисовать страницу)
+    // тут идет потготовка данных, из полученных данных формируем нужную в текущей таблице структуру
     componentDidMount() {
         let products = [];
         let manProducts = this.props.data.products;
@@ -108,7 +115,9 @@ export default class AddRemains extends React.Component {
             isLoaded: true
         })
     }
+    //-------------------------------------------------------------------------------------------------------------
 
+    // Функция возвращает количество по артиклу из массива ---------------------------------------------------------------------------
     checkArt(art, arr) {
         let result = -1;
         arr.map((item, index) => {
@@ -117,7 +126,9 @@ export default class AddRemains extends React.Component {
         })
         return result
     }
+    //-------------------------------------------------------------------------------------------------------------
 
+    // Функция сохраняет количество из сканера в инпуты таблицы ---------------------------------------------------------------------------
     save(val) {
         let table = this.state.table;
 
@@ -131,7 +142,10 @@ export default class AddRemains extends React.Component {
             table: table
         })
     }
+    //-------------------------------------------------------------------------------------------------------------
 
+    // функция вызывается перед сохранением. Проверяет равно ли фактическое кол-во с заявленным ---------------------------------------------------------------------------
+    // если не равняется открывает модальное окно с предупреждением
     preSaveCounts() {
         let normal = true;
         this.state.table.map((item,index) => {
@@ -146,7 +160,9 @@ export default class AddRemains extends React.Component {
             })
         }
     }
+    //-------------------------------------------------------------------------------------------------------------
 
+    // функция возвращает id продукта по артиклу ---------------------------------------------------------------------------
     getId(art) {
         let result = -1
         this.props.data.products.map((item,index) => {
@@ -156,7 +172,10 @@ export default class AddRemains extends React.Component {
         })
         return result
     }
+    //-------------------------------------------------------------------------------------------------------------
 
+    // функция возвращает id остатка по id продукта ---------------------------------------------------------------------------
+    // причем может вернуть из любой группе данных, главное чтобы по структуре в данных был и ид остатков и ид продукта
     getRemainsId(id, data) {
         let result = -1;
         data.map((item,index) => {
@@ -164,7 +183,9 @@ export default class AddRemains extends React.Component {
         })
         return result
     }
+    //-------------------------------------------------------------------------------------------------------------
 
+    // сохраняет всю поставку в нужные остатки этого магазина ---------------------------------------------------------------------------
     saveCounts() {
         let newData = this.props.data;
         let arr = [];
@@ -192,13 +213,12 @@ export default class AddRemains extends React.Component {
                 })
             }
         })
-        // console.log(this.props.data);
-        // console.log('-----------');
-        // console.log(newData);
         this.props.dataUpdate(newData);
         this.props.finish();
     }
+    //-------------------------------------------------------------------------------------------------------------
 
+    // Возвращает модальное окно ---------------------------------------------------------------------------
     modalWindow() {
         if(this.state.modal) {
             return(
@@ -215,7 +235,9 @@ export default class AddRemains extends React.Component {
             )
         } else return null
     }
+    //-------------------------------------------------------------------------------------------------------------
 
+    // функция которая рисует страницу ---------------------------------------------------------------------------
     render() {
         return (
             <div>
@@ -258,4 +280,5 @@ export default class AddRemains extends React.Component {
             </div>
         );
     }
+    //-------------------------------------------------------------------------------------------------------------
 }

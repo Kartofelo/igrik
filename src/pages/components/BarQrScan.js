@@ -1,8 +1,6 @@
 import React from 'react'; //импорт компонентов из библиотеки реакт
-import { Html5Qrcode } from "html5-qrcode";
+import { Html5Qrcode } from "html5-qrcode"; //импорт библиотеки Html5Qrcode
 import { ConfigProvider, Space, Button } from 'antd'; //импорт компонентов из библиотеки АнтДизайн
-
-
 
 export default class BarQrScan extends React.Component {
 
@@ -15,6 +13,9 @@ export default class BarQrScan extends React.Component {
         }
     }
 
+    // функция преднсатройки перед рендером ---------------------------------------------------------------------------
+    // (функция componentDidMount() всегда вызывается перед тем как отрисовать страницу)
+    // тут идет настройка библиотеки Html5Qrcode, вызова вебкамеры для сканера, описывается что делать когда штрих-код просканеться
     componentDidMount() {
         Html5Qrcode.getCameras().then(devices => {
             /**
@@ -56,6 +57,7 @@ export default class BarQrScan extends React.Component {
         });
     }
 
+    // функция рисует страницу ---------------------------------------------------------------------------
     render() {
         return (
             <div style={{ backgroundColor: '#0000001a' }} className='loaderDiv'>

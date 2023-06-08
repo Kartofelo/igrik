@@ -4,8 +4,8 @@ import Icon, {
     CameraFilled,
 } from '@ant-design/icons'; //импорт иконок из библиотеки АнтДизайн
 
-import BarQrScan from './components/BarQrScan';
-import AddRemains from './components/AddRemains_ADeliveries';
+import BarQrScan from './components/BarQrScan'; //импорт самописного компонента - сканера возвращающий артикул
+import AddRemains from './components/AddRemains_ADeliveries'; //иморт самописного компонента - страницу распоковки коробки
 
 export default class ADeliveries extends React.Component {
 
@@ -22,12 +22,14 @@ export default class ADeliveries extends React.Component {
         }
     }
 
+    // функция обработки изменения инпутов ---------------------------------------------------------------------------
     onChangeFilters = (tg, e) => {
         let name = e.target.name;
         let value = e.target.value;
         this.setState({ [name]: value });
     }
 
+    // функция добавления коробки. Функция проверяет есть ли коробка в бд и не была ли она уже добавлена ---------------------------------------------------------------------------
     addBox(num) {
         let table = this.state.table;
         let check = true;
@@ -69,6 +71,7 @@ export default class ADeliveries extends React.Component {
         return result;
     }
 
+    // функция отрисовки таблицы ---------------------------------------------------------------------------
     renderTable() {
         // 1 - тут формируется структура столбцов от полученных данных из FireBase
         let column = [
@@ -106,6 +109,7 @@ export default class ADeliveries extends React.Component {
         )
     }
 
+    // функция распоковки. Вытаскивает все продукты которые были во всех добавленных коробках и отправляет в компонент AddRemains ---------------------------------------------------------------------------
     unpacking() {
         let boxNumbers = [];
         let boxesId = [];
@@ -125,6 +129,7 @@ export default class ADeliveries extends React.Component {
         })
     }
 
+    // функция возвращает страницу ---------------------------------------------------------------------------
     renderMain() {
         return(
             <ConfigProvider
@@ -152,14 +157,15 @@ export default class ADeliveries extends React.Component {
         )
     }
 
+    // функция отменяет распоковку ---------------------------------------------------------------------------
     unpackingCancel(){
         this.setState({
             unpacking: false,
             boxesId: [],
-
         })
     }
 
+    // функция сохраняет распоковку, добовляя все количества в бд ---------------------------------------------------------------------------
     finish() {
         this.setState({
             unpacking: false,
@@ -174,6 +180,7 @@ export default class ADeliveries extends React.Component {
         this.props.mesTest('success', "Коробка была удачно распакована :)");
     }
 
+    // функция отрисовывает страницу (исходя из построенной логики) ---------------------------------------------------------------------------
     render() {
         return (
             <div>

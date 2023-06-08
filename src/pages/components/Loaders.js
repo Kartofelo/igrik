@@ -1,4 +1,7 @@
-import React from 'react'; //импорт компонентов из библиотеки реакт
+// В этом файле и описывать нечего
+// Это всего компонент загрузки (анимация крутилки)
+// Нужен чтобы перекрыть интерфейс пользователю пока данные грузяться (чтобы он не натворил глупостей во время загрузки)
+import React from 'react'; 
 import { LoadingOutlined } from '@ant-design/icons';
 import { Spin, ConfigProvider, Space   } from 'antd';
 

@@ -1,7 +1,6 @@
 import React from 'react'; //импорт компонентов из библиотеки реакт
-import { Html5Qrcode } from "html5-qrcode";
+import { Html5Qrcode } from "html5-qrcode"; //импорт библиотеки Html5Qrcode
 import { ConfigProvider, Space, Button, Select } from 'antd'; //импорт компонентов из библиотеки АнтДизайн
-import Item from 'antd/es/list/Item';
 
 export default class ScanProducts extends React.Component {
     constructor(props) {
@@ -15,6 +14,7 @@ export default class ScanProducts extends React.Component {
         }
     }
 
+    // функция возвращает плашку с названием и количеством ---------------------------------------------------------------------------
     productComponent(img, art, name, count, ind) {
         // console.log(art);
         return (
@@ -36,6 +36,7 @@ export default class ScanProducts extends React.Component {
         )
     }
 
+    // Логика поиска продукта и подсчета по артиклу ---------------------------------------------------------------------------
     scanEnd(val) {
         let itemExistence = false;
         let productsInfo = this.state.productsInfo;
@@ -67,6 +68,7 @@ export default class ScanProducts extends React.Component {
         })
     }
 
+    // Запуск камеры для сканирования ---------------------------------------------------------------------------
     scanSctart() {
         this.setState({scanStart: true})
         Html5Qrcode.getCameras().then(devices => {
@@ -75,7 +77,7 @@ export default class ScanProducts extends React.Component {
              * { id: "id", label: "label" }
              */
             if (devices && devices.length) {
-                var cameraId = devices.length == 1 ? devices[0].id : devices[1].id;
+                var cameraId = devices[0].id;
                 const html5QrCode = new Html5Qrcode(/* element id */ "reader");
                 this.setState({
                     loadingText: 'Готово!'
@@ -106,10 +108,13 @@ export default class ScanProducts extends React.Component {
         });
     }
 
+    // перед началом отрисовки вызывается функция scanSctart() ---------------------------------------------------------------------------
     componentDidMount() {
         this.scanSctart();
     }
 
+    // Логика отрисовки некоторых кнопок ---------------------------------------------------------------------------
+    // если сканирование вызвали в инвентаризации, то дополнительно появляется выбор куда сохранить количество (склад [по умолчанию] или зал)
     renderBut() {
         if(this.props.invent) {
             return (
@@ -141,6 +146,7 @@ export default class ScanProducts extends React.Component {
         }
     }
 
+    // отрисовка страницы ---------------------------------------------------------------------------
     render() {
         return (
             <div style={{ backgroundColor: '#0000001a' }} className='loaderDiv'>

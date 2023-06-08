@@ -89,6 +89,23 @@ export default class Main extends React.Component {
   }
   //-------------------------------------------------------------------------------------------------------------
 
+  loadDb(token) {
+    const starCountRef = ref(db, 'db');
+    let result;
+    onValue(starCountRef, (snapshot) => {
+      result = snapshot.val()
+      result.users.map((item, index) => {
+        if (item.Token == token) {
+          this.setState({
+            userInfo: item,
+            isLoaded: true,
+            data: result
+          })
+        }
+      })
+    })
+  }
+
   saveDate(data) {
     const db = getDatabase();
     set(ref(db, 'db'), data);

@@ -102,3 +102,9 @@ body {
     transform: rotate(360deg);
   }
 }
+
+@media print {
+  .ant-notification, .deletePrint {
+    display: none;
+  }
+}
