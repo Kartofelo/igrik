@@ -6,6 +6,7 @@ import Icon, {
 
 import ADeliveries from './ADeliveries';
 import AExportSheet from './AExportSheet';
+import AMovement from './AMovement';
 
 import { ReactComponent as Icon_Box } from '../img/svg/box.svg'; //импорт svg картинки
 import { ReactComponent as Icon_List } from '../img/svg/list.svg'; //импорт svg картинки
@@ -23,7 +24,8 @@ export default class Admins extends React.Component {
             pages: 'main',
             modal: 0,
             complex: null,
-            type: null
+            type: null,
+            zona: null
         }
     }
     //-------------------------------------------------------------------------------------------------------------
@@ -34,6 +36,13 @@ export default class Admins extends React.Component {
                 [e.target.name]: e.target.value
             })
         };
+
+        const startMove = () => {
+            this.setState({
+                pages: 'aMovement',
+                modal: 0
+            })
+        }
 
         const nex2t = (isFirst) => {
             if(isFirst && this.state.type == 0) {
@@ -85,6 +94,22 @@ export default class Admins extends React.Component {
                         </Space>
                     </div>
                 )
+            case 3:
+                return (
+                    <div style={{ backgroundColor: '#0000001a' }} className='loaderDiv'>
+                        <Space style={{ width: '500px' }} className='scanDiv' direction="vertical" size={30}>
+                            <h3 style={{ margin: '0px' }}>Выберите зону хранения</h3>
+                            <Radio.Group name={'zona'} onChange={onChangeRadio} value={this.state.zona}>
+                                <Radio key={0} value={0}>Склад</Radio>
+                                <Radio key={1} value={1}>Зал</Radio>
+                            </Radio.Group>
+                            <Space direction="horizontal" size={10}>
+                                <Button disabled={this.state.zona == null} onClick={() => { startMove() }} type="primary">Далее</Button>
+                                <Button onClick={() => this.setState({ modal: 0 })} ghost type="primary">Отмена</Button>
+                            </Space>
+                        </Space>
+                    </div>
+                )
             default:
                 return ''
         }
@@ -116,6 +141,18 @@ export default class Admins extends React.Component {
                     />
                 )
 
+            case "aMovement":
+                return (
+                    <AMovement
+                        dataUpdate={(data) => this.props.dataUpdate(data)}
+                        back={() => this.setState({ pages: 'main' })}
+                        data={this.props.data}
+                        type = {this.state.zona}
+                        userInfo={this.props.userInfo}
+                        mesTest={(type, mes) => { this.props.mesTest(type, mes) }}
+                    />
+                )
+
             default:
                 return (
                     <div>
@@ -136,7 +173,7 @@ export default class Admins extends React.Component {
                                 </Space>
                                 <h2>Передвижение товара</h2>
                                 <Space>
-                                    <Button onClick={() => this.setState({ pages: "" })} icon={<Icon component={Icon_Moving} />} size='large' type="primary" htmlType="submit" className="main_button">
+                                    <Button onClick={() => this.setState({ modal: 3 })} icon={<Icon component={Icon_Moving} />} size='large' type="primary" htmlType="submit" className="main_button">
                                         Перемещение
                                     </Button>
                                     <Button onClick={() => this.setState({ modal: 1 })} icon={<Icon component={Icon_Clipboard} />} size='large' type="primary" htmlType="submit" className="main_button">
